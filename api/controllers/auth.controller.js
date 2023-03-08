@@ -11,8 +11,7 @@ const Register = async (req, res) => {
 
     /* Creating a new user object. */
     const newUser = new User({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      userName: req.body.userName,
       email: req.body.email,
       password: hashedPassword,
     });
@@ -44,12 +43,8 @@ const Login = async (req, res) => {
     const accessToken = jwt.sign(
       {
         _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        userName: user.userName,
         email: user.email,
-        profilePicture: user.profilePicture,
-        followers: user.followers,
-        followings: user.followings,
         isAdmin: user.isAdmin,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
@@ -64,7 +59,8 @@ const Login = async (req, res) => {
     user.token = accessToken;
 
     // return new user
-    res.status(200).json(user);
+    const { password, ...others } = user._doc;
+    res.status(200).json(others);
   } catch (error) {
     res.status(500).json(error.message);
   }

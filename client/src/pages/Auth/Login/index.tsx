@@ -1,6 +1,18 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  //initialize inputs empty
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+  });
+
+  //get all inputs values from client side
+  const handleChange = (e) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg text-center">
@@ -21,6 +33,8 @@ const Login = () => {
           <div className="relative">
             <input
               type="email"
+              name="email"
+              onChange={handleChange}
               className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
               placeholder="Enter email"
             />
@@ -52,6 +66,8 @@ const Login = () => {
           <div className="relative">
             <input
               type="password"
+              name="password"
+              onChange={handleChange}
               className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
               placeholder="Enter password"
             />
