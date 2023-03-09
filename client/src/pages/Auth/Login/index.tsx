@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const Login = () => {
   //initialize inputs empty
@@ -11,6 +13,15 @@ const Login = () => {
   //get all inputs values from client side
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    // dispatch(login(inputs));
+    navigate("/");
   };
 
   return (
@@ -109,6 +120,7 @@ const Login = () => {
 
           <button
             type="submit"
+            onClick={handleSignIn}
             className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
           >
             Sign In

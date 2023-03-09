@@ -1,26 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+
+
 export const authSlice = createSlice({
-  name: "auth",
+  name: "user",
   initialState: {
-    userName: "",
-    email: "",
-    password: "",
+    userInfo: { userName: "", email: "", password: "" },
+    isPending: false,
+    error: false,
   },
   reducers: {
-    register: (state, action) => {
-      state.userName = action.payload.userName;
-      state.email = action.payload.email;
-      state.password = action.payload.password;
+    registerStart: (state) => {
+      state.isPending = false;
     },
-    login: (state, action) => {
-      state.email = action.payload.email;
-      state.password = action.payload.password;
+    registerSuccess: (state, action) => {
+      state.isPending = true;
+      state.userInfo = action.payload;
+    },
+    registerFailure: (state) => {
+      state.isPending = false;
+      state.error = true;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { register, login } = authSlice.actions;
+export const { registerStart, registerSuccess, registerFailure } =
+  authSlice.actions;
 
 export default authSlice.reducer;

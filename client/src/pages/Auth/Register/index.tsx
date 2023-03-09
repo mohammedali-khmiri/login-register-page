@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import CustomizedSnackbars from "../../../assets/snackBar";
+import { register } from "../../../redux/apiCalls";
 
 const Register = () => {
   //initialize inputs empty
@@ -9,12 +12,21 @@ const Register = () => {
     password: "",
     confirmedPassword: "",
   });
-
-
   //get all inputs values from client side
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  const dispatch = useDispatch();
+  const { error, isPending } = useSelector((state) => state.user);
+  const [openSnak, setOpenSnak] = useState(false);
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    register(inputs, dispatch);
+    setOpenSnak(true);
+  };
+
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg text-center">
@@ -25,7 +37,6 @@ const Register = () => {
           nulla eaque error neque ipsa culpa autem, at itaque nostrum!
         </p>
       </div>
-
       <form action="" className="mx-auto mt-8 mb-0 max-w-md space-y-4">
         <div>
           <label htmlFor="userName" className="sr-only">
@@ -181,12 +192,22 @@ const Register = () => {
 
           <button
             type="submit"
+            onClick={handleSignUp}
             className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
           >
-            Sign in
+            Sign Up
           </button>
         </div>
       </form>
+      {error && (
+        <span style={{ color: "red", fontSize: "14px" }}>
+          Something went wrong!
+        </span>
+      )}
+      {openSnak && (
+        <CustomizedSnackbars open={openSnak} setOpen={setOpenSnak} />
+      )}
+      ;
     </div>
   );
 };
