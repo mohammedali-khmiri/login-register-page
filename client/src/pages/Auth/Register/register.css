@@ -1,0 +1,9 @@
+/* .error-span {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
+
+#username:invalid ~ .error-span {
+  display: block;
+} */

@@ -1,8 +1,9 @@
+import { Alert } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import CustomizedSnackbars from "../../../assets/snackBar";
-import { register } from "../../../redux/apiCalls";
+import { register } from "../../../redux/thunk/user.thunk";
+import "./register.css";
 
 const Register = () => {
   //initialize inputs empty
@@ -17,14 +18,25 @@ const Register = () => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { error, isPending } = useSelector((state) => state.user);
-  const [openSnak, setOpenSnak] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    register(inputs, dispatch);
-    setOpenSnak(true);
+
+    dispatch(register(inputs))
+      .then((result) => {
+        setInputs({
+          userName: "",
+          email: "",
+          password: "",
+          confirmedPassword: "",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -50,6 +62,7 @@ const Register = () => {
               onChange={handleChange}
               className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
               placeholder="Enter Username"
+              value={inputs.userName}
             />
 
             <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
@@ -69,6 +82,7 @@ const Register = () => {
               </svg>
             </span>
           </div>
+          <span className="error-span">invalid username</span>
         </div>
         <div>
           <label htmlFor="email" className="sr-only">
@@ -82,6 +96,7 @@ const Register = () => {
               onChange={handleChange}
               className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
               placeholder="Enter email"
+              value={inputs.email}
             />
 
             <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
@@ -115,6 +130,7 @@ const Register = () => {
               onChange={handleChange}
               className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
               placeholder="Enter password"
+              value={inputs.password}
             />
 
             <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
@@ -153,6 +169,7 @@ const Register = () => {
               onChange={handleChange}
               className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
               placeholder="Confirm Password"
+              value={inputs.confirmedPassword}
             />
 
             <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
@@ -198,15 +215,11 @@ const Register = () => {
             Sign Up
           </button>
         </div>
+        {user.error && <Alert severity="error">Something went wrong!</Alert>}
+        {user.pending === false && (
+          <Alert severity="success">successfully registered</Alert>
+        )}
       </form>
-      {error && (
-        <span style={{ color: "red", fontSize: "14px" }}>
-          Something went wrong!
-        </span>
-      )}
-      {openSnak && (
-        <CustomizedSnackbars open={openSnak} setOpen={setOpenSnak} />
-      )}
       ;
     </div>
   );
