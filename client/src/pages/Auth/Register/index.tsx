@@ -1,9 +1,8 @@
-import { Alert } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../../redux/thunk/user.thunk";
-import "./register.css";
 
 const Register = () => {
   //initialize inputs empty
@@ -64,7 +63,6 @@ const Register = () => {
               placeholder="Enter Username"
               value={inputs.userName}
             />
-
             <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +80,6 @@ const Register = () => {
               </svg>
             </span>
           </div>
-          <span className="error-span">invalid username</span>
         </div>
         <div>
           <label htmlFor="email" className="sr-only">
@@ -207,20 +204,32 @@ const Register = () => {
             </Link>
           </p>
 
-          <button
-            type="submit"
-            onClick={handleSignUp}
-            className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
-          >
-            Sign Up
-          </button>
+          {user.pending ? (
+            <>
+              <CircularProgress className="" />
+              <button
+                type="button"
+                className="inline-block rounded-lg bg-blue-500  py-3 text-sm font-medium text-white"
+                disabled
+              >
+                Processing...
+              </button>
+            </>
+          ) : (
+            <button
+              type="submit"
+              onClick={handleSignUp}
+              className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+            >
+              Sign Up
+            </button>
+          )}
         </div>
         {user.error && <Alert severity="error">Something went wrong!</Alert>}
         {user.pending === false && (
-          <Alert severity="success">successfully registered</Alert>
+          <Alert severity="success">successfully registered!</Alert>
         )}
       </form>
-      ;
     </div>
   );
 };

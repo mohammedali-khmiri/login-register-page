@@ -1,13 +1,16 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
 const Home = () => {
+  const userName = useSelector((state) => state.user.userInfo.userName);
   return (
     <div className="w-screen h-screen  ">
       <Navbar />
 
       <div className="m-48  ">
-        <h1 className="text-7xl self-auto">hey there is home</h1>
+        <h1 className="text-7xl self-auto">Welcome {userName}</h1>
+        <h1>This is Home Page</h1>
         <Link to="auth/login">
           <button
             type="submit"

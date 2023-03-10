@@ -34,6 +34,18 @@ export const authSlice = createSlice({
       state.pending = null;
       state.error = true;
     });
+    builder.addCase(login.pending, (state) => {
+      state.pending = true;
+      state.error = false;
+    });
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.pending = false;
+      state.userInfo = action.payload;
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.pending = null;
+      state.error = true;
+    });
   },
 });
 

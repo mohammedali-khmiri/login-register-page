@@ -1,9 +1,13 @@
+import { Alert } from "@mui/material";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-
+import CustomizedSnackbars from "../../../assets/snackBar";
+import { login } from "../../../redux/thunk/user.thunk";
 
 const Login = () => {
+  const [open, setOpen] = useState(false);
+
   //initialize inputs empty
   const [inputs, setInputs] = useState({
     email: "",
@@ -15,13 +19,22 @@ const Login = () => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    // dispatch(login(inputs));
-    navigate("/");
+    dispatch(login(inputs))
+      .then((result) => {
+        setOpen(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -126,6 +139,7 @@ const Login = () => {
             Sign In
           </button>
         </div>
+        <CustomizedSnackbars open={open} setOpen={setOpen} />
       </form>
     </div>
   );
